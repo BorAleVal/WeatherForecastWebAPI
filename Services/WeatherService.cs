@@ -25,18 +25,11 @@ namespace WeatherForecastWebAPI.Services
             return weatherColl.Find(filter).FirstOrDefault();
         }
 
-        //public List<CityWeather> GetCities()
-        //{
-        //    var builder = new FilterDefinitionBuilder<CityWeather>();
-        //    var filter = builder.Empty; // фильтр для выборки всех документов
-
-        //    return weatherColl.Find(filter).ToList();
-        //}
-
         public List<string> GetCities()
         {
             var builder = new FilterDefinitionBuilder<CityWeather>();
-            var filter = builder.Empty; // фильтр для выборки всех документов
+            // фильтр для выборки всех документов
+            var filter = builder.Empty;
 
             return weatherColl.Find(filter).ToList().Select(x => x.CityName).ToList();
         }
