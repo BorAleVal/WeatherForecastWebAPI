@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using WeatherForecastWebAPI.Models;
-using WeatherForecastWebAPI.Services;
+using WeatherForecastModels;
 
 namespace WeatherForecastWebAPI.Controllers
 {
@@ -11,29 +12,31 @@ namespace WeatherForecastWebAPI.Controllers
     [ApiController]
     public class WeatherCitiesController : ControllerBase
     {
-        private readonly WeatherService weatherService;
+        private readonly IMongoWeatherDBContext context;
+        protected IMongoCollection<CityWeather> dbCollection;
 
-        public WeatherCitiesController(WeatherService context)
+        public WeatherCitiesController(IMongoWeatherDBContext context)
         {
-            weatherService = context;
+            this.context = context;
+            dbCollection = this.context.GetCollection<CityWeather>(typeof(CityWeather).Name);
         }
 
         [HttpGet]
         public ActionResult<List<string>> Get()
         {
-            return weatherService.GetCities();
+            var builder = new FilterDefinitionBuilder<CityWeather>();
+            // фильтр для выборки всех документов
+            var filter = builder.Empty;
+            var cities = dbCollection.Find(filter).ToList().Select(x => x.CityName).ToList();
+            return Ok(cities);
         }
 
-        [HttpGet("{City}")]
-        public ActionResult<CityWeather> Get(string City)
+        [HttpGet("{CityName}")]
+        public ActionResult<CityWeather> Get(string CityName)
         {
-            return weatherService.GetWeather(City);
+            FilterDefinition<CityWeather> filter = Builders<CityWeather>.Filter.Eq(x => x.CityName, CityName);
+            var cityWeather = dbCollection.Find(filter).FirstOrDefault();
+            return Ok(cityWeather);
         }
-
-        //[HttpGet]
-        //public ActionResult<List<CityWeather>> Get()
-        //{
-        //    return weatherService.GetCities();
-        //}
     }
 }
