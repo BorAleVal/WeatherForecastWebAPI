@@ -5,11 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="WeatherForecastWebAPITests\**" />
+    <Compile Remove="WeatherModel\**" />
+    <Content Remove="WeatherForecastWebAPITests\**" />
+    <Content Remove="WeatherModel\**" />
+    <EmbeddedResource Remove="WeatherForecastWebAPITests\**" />
+    <EmbeddedResource Remove="WeatherModel\**" />
+    <None Remove="WeatherForecastWebAPITests\**" />
+    <None Remove="WeatherModel\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherModel\WeatherForecastModels.csproj" />
+    <ProjectReference Include="WeatherModel\WeatherForecastModels.csproj" />
   </ItemGroup>
 
 </Project>

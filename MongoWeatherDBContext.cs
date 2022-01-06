@@ -3,7 +3,6 @@ using MongoDB.Driver;
 
 namespace WeatherForecastWebAPI
 {
-    // TODO : вычитал, что необходимо реализовать как синглтон
     public class MongoWeatherDBContext : IMongoWeatherDBContext
     {
         private IMongoDatabase db { get; set; }
